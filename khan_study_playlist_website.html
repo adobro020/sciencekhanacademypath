@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Integrated Physical Sciences Khan Academy Study Plan</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111c33;
+      --panel-2: #18243d;
+      --card: #ffffff;
+      --text: #e5e7eb;
+      --muted: #a7b0c0;
+      --ink: #162033;
+      --soft: #f5f7fb;
+      --accent: #4f46e5;
+      --accent-2: #06b6d4;
+      --green: #16a34a;
+      --yellow: #f59e0b;
+      --border: #dbe2ef;
+      --shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--soft);
+      color: var(--ink);
+      line-height: 1.55;
+    }
+
+    a { color: inherit; }
+
+    .hero {
+      background:
+        radial-gradient(circle at 15% 25%, rgba(6, 182, 212, 0.35), transparent 28%),
+        radial-gradient(circle at 80% 10%, rgba(79, 70, 229, 0.55), transparent 35%),
+        linear-gradient(135deg, #0f172a 0%, #172554 62%, #1e1b4b 100%);
+      color: white;
+      padding: 54px 24px 34px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% -140px -10%;
+      height: 230px;
+      background: rgba(255,255,255,0.08);
+      transform: rotate(-3deg);
+      border-radius: 50%;
+    }
+
+    .hero-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.4fr 0.6fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 7px 12px;
+      border: 1px solid rgba(255,255,255,0.24);
+      background: rgba(255,255,255,0.1);
+      border-radius: 999px;
+      font-size: 0.88rem;
+      color: #dbeafe;
+      margin-bottom: 18px;
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      font-size: clamp(2.1rem, 5vw, 4.4rem);
+      line-height: 1.02;
+      margin: 0 0 18px;
+      letter-spacing: -0.06em;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2vw, 1.22rem);
+      color: #dbeafe;
+      max-width: 760px;
+      margin: 0 0 24px;
+    }
+
+    .hero-actions, .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .button {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-weight: 750;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.18);
+    }
+    .button:hover { transform: translateY(-1px); }
+    .button.primary { background: white; color: #172554; }
+    .button.secondary { background: rgba(255,255,255,0.12); color: white; border: 1px solid rgba(255,255,255,0.18); }
+    .button.small { padding: 8px 12px; font-size: 0.88rem; box-shadow: none; }
+    .button.ghost { background: #eef2ff; color: #3730a3; box-shadow: none; }
+
+    .progress-panel {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: var(--radius);
+      padding: 22px;
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+    }
+
+    .progress-number {
+      font-size: 3.1rem;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -0.06em;
+      margin: 4px 0 8px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 14px;
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 16px 0 12px;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #22c55e, #06b6d4);
+      border-radius: 999px;
+      transition: width 0.35s ease;
+    }
+
+    .layout {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 24px 70px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+    }
+
+    .sidebar {
+      align-self: start;
+      position: sticky;
+      top: 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .sidebar h2 {
+      font-size: 1rem;
+      margin: 0 0 12px;
+      color: #334155;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 7px;
+    }
+
+    .nav-list a {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 11px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #334155;
+      background: #f8fafc;
+      font-weight: 680;
+      font-size: 0.94rem;
+    }
+
+    .nav-list a:hover { background: #eef2ff; color: #3730a3; }
+    .count-pill {
+      color: #64748b;
+      font-weight: 800;
+      font-size: 0.82rem;
+    }
+
+    .main { min-width: 0; }
+
+    .toolbar {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .search {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 12px 15px;
+      font: inherit;
+      outline: none;
+      background: #f8fafc;
+    }
+    .search:focus { border-color: #818cf8; box-shadow: 0 0 0 4px #eef2ff; background: white; }
+
+    .section {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin-bottom: 22px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #edf2f7;
+    }
+
+    .section h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      letter-spacing: -0.035em;
+    }
+
+    .section-subtitle {
+      color: #64748b;
+      margin: 5px 0 0;
+    }
+
+    .lesson-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .lesson-card {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 14px;
+      align-items: start;
+      padding: 15px;
+      background: #fbfdff;
+      border: 1px solid #e8eef7;
+      border-radius: 16px;
+      transition: background 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+    }
+    .lesson-card:hover { background: white; transform: translateY(-1px); }
+    .lesson-card.completed { opacity: 0.64; background: #f8fafc; }
+    .lesson-card.completed .lesson-title { text-decoration: line-through; }
+
+    .lesson-checkbox {
+      width: 22px;
+      height: 22px;
+      accent-color: var(--green);
+      margin-top: 3px;
+      cursor: pointer;
+    }
+
+    .lesson-title {
+      margin: 0 0 6px;
+      font-weight: 830;
+      color: #172554;
+    }
+
+    .lesson-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .tag {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 0.78rem;
+      font-weight: 780;
+      background: #eef2ff;
+      color: #3730a3;
+    }
+    .tag.video { background: #ecfeff; color: #0e7490; }
+    .tag.article { background: #f0fdf4; color: #15803d; }
+    .tag.practice { background: #fff7ed; color: #c2410c; }
+    .tag.review { background: #fef2f2; color: #b91c1c; }
+
+    .lesson-desc {
+      margin: 0;
+      color: #526174;
+      font-size: 0.95rem;
+    }
+
+    .open-link {
+      white-space: nowrap;
+      text-decoration: none;
+      color: white;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 850;
+      font-size: 0.85rem;
+      align-self: center;
+      box-shadow: 0 8px 18px rgba(79, 70, 229, 0.22);
+    }
+
+    .note-card {
+      border: 1px dashed #cbd5e1;
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 14px;
+      color: #475569;
+    }
+
+    .footer {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px 40px;
+      color: #64748b;
+      font-size: 0.92rem;
+      text-align: center;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 920px) {
+      .hero-inner, .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .toolbar { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .hero { padding: 38px 18px 26px; }
+      .layout { padding: 22px 14px 50px; }
+      .section { padding: 16px; }
+      .section-header { flex-direction: column; }
+      .lesson-card { grid-template-columns: auto 1fr; }
+      .open-link { grid-column: 2; justify-self: start; }
+      .hero-actions { align-items: stretch; }
+      .button { width: 100%; }
+    }
+
+    @media print {
+      .hero-actions, .sidebar, .toolbar, .open-link { display: none; }
+      .hero { color: #111827; background: white; padding: 20px; }
+      .hero p, .eyebrow { color: #374151; }
+      .layout { display: block; padding: 0 20px; }
+      .section, .toolbar { box-shadow: none; break-inside: avoid; }
+      .lesson-card { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="eyebrow">📚 Custom Khan Academy Path · Integrated Physical Sciences</div>
+        <h1>Study Guide Playlist</h1>
+        <p>Follow these Khan Academy lessons, videos, articles, and practice sets in the same order as the study guide: science inquiry, physics, chemistry, and Earth science.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#start">Start studying</a>
+          <button class="button secondary" id="printBtn" type="button">Print checklist</button>
+          <button class="button secondary" id="resetBtn" type="button">Reset progress</button>
+        </div>
+      </div>
+      <aside class="progress-panel" aria-label="Study progress">
+        <div>Overall progress</div>
+        <div class="progress-number"><span id="progressPercent">0</span>%</div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div><span id="completedCount">0</span> of <span id="totalCount">0</span> lessons completed</div>
+      </aside>
+    </div>
+  </header>
+
+  <div class="layout" id="start">
+    <nav class="sidebar" aria-label="Page sections">
+      <h2>Sections</h2>
+      <ul class="nav-list">
+        <li><a href="#science">Nature of Science <span class="count-pill">7</span></a></li>
+        <li><a href="#physics-motion">Physics: Motion & Forces <span class="count-pill">12</span></a></li>
+        <li><a href="#physics-energy">Physics: Energy <span class="count-pill">6</span></a></li>
+        <li><a href="#physics-waves">Physics: Waves & EM <span class="count-pill">7</span></a></li>
+        <li><a href="#chem-atoms">Chemistry: Atoms & Table <span class="count-pill">6</span></a></li>
+        <li><a href="#chem-bonding">Chemistry: Bonding <span class="count-pill">6</span></a></li>
+        <li><a href="#chem-matter">Chemistry: Matter & Change <span class="count-pill">8</span></a></li>
+        <li><a href="#earth-space">Earth Science: Space <span class="count-pill">6</span></a></li>
+        <li><a href="#earth-rocks">Earth Science: Rocks <span class="count-pill">4</span></a></li>
+        <li><a href="#earth-weather">Earth Science: Atmosphere <span class="count-pill">4</span></a></li>
+      </ul>
+    </nav>
+
+    <main class="main">
+      <div class="toolbar">
+        <input class="search" id="searchInput" type="search" placeholder="Search lessons, topics, or keywords…" />
+        <div class="filters" aria-label="Lesson filters">
+          <button class="button small ghost" type="button" data-filter="all">All</button>
+          <button class="button small ghost" type="button" data-filter="video">Videos</button>
+          <button class="button small ghost" type="button" data-filter="article">Articles</button>
+          <button class="button small ghost" type="button" data-filter="practice">Practice</button>
+          <button class="button small ghost" type="button" data-filter="review">Guide review</button>
+        </div>
+      </div>
+
+      <section class="section" id="science" data-section>
+        <div class="section-header">
+          <div>
+            <h2>Nature of Science, Inquiry, and Research Methods</h2>
+            <p class="section-subtitle">Start here so experiments, variables, models, data, and correlation are clear before the science content.</p>
+          </div>
+          <button class="button small ghost section-toggle" type="button">Mark section done</button>
+        </div>
+        <div class="lesson-grid">
+          <article class="lesson-card" data-type="article" data-search="scientific method observations questions hypotheses predictions testing revising ideas">
+            <input class="lesson-checkbox" type="checkbox" data-id="lesson-1" />
+            <div><p class="lesson-title">The scientific method</p><div class="lesson-meta"><span class="tag article">Article</span></div><p class="lesson-desc">Covers observations, questions, hypotheses, predictions, testing, and revising ideas.</p></div>
+            <a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/high-school-biology/hs-biology-foundations/hs-the-scientific-method/a/the-science-of-biology">Open</a>
+          </article>
+          <article class="lesson-card" data-type="video" data-search="scientific method inquiry overview video">
+            <input class="lesson-checkbox" type="checkbox" data-id="lesson-2" />
+            <div><p class="lesson-title">The scientific method</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Watch for a quick overview of scientific inquiry.</p></div>
+            <a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/biology/the-scientific-method">Open</a>
+          </article>
+          <article class="lesson-card" data-type="article" data-search="controlled experiments independent dependent control variables observational studies">
+            <input class="lesson-checkbox" type="checkbox" data-id="lesson-3" />
+            <div><p class="lesson-title">Controlled experiments</p><div class="lesson-meta"><span class="tag article">Article</span></div><p class="lesson-desc">Matches independent, dependent, and control variables plus observational studies.</p></div>
+            <a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/biology/intro-to-biology/science-of-biology/a/experiments-and-observations">Open</a>
+          </article>
+          <article class="lesson-card" data-type="practice" data-search="scientific method experimental design hypothesis variables practice">
+            <input class="lesson-checkbox" type="checkbox" data-id="lesson-4" />
+            <div><p class="lesson-title">The scientific method and experimental design</p><div class="lesson-meta"><span class="tag practice">Practice</span></div><p class="lesson-desc">Practice identifying hypotheses, variables, and experiment structure.</p></div>
+            <a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/biology/intro-to-biology/science-of-biology/e/the-scientific-method-and-experimental-design">Open</a>
+          </article>
+          <article class="lesson-card" data-type="article" data-search="scatterplots correlation positive negative direct inverse no correlation">
+            <input class="lesson-checkbox" type="checkbox" data-id="lesson-5" />
+            <div><p class="lesson-title">Scatterplots and correlation review</p><div class="lesson-meta"><span class="tag article">Article</span></div><p class="lesson-desc">Covers positive/direct, negative/inverse, and no-correlation trends.</p></div>
+            <a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data/a/scatterplots-and-correlation-review">Open</a>
+          </article>
+          <article class="lesson-card" data-type="article" data-search="describing scatterplots form direction strength outliers data trends">
+            <input class="lesson-checkbox" type="checkbox" data-id="lesson-6" />
+            <div><p class="lesson-title">Describing scatterplots</p><div class="lesson-meta"><span class="tag article">Article</span></div><p class="lesson-desc">Use this for form, direction, strength, and outliers in graphs.</p></div>
+            <a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data/a/describing-scatterplots-form-direction-strength-outliers">Open</a>
+          </article>
+          <article class="lesson-card" data-type="practice" data-search="positive and negative linear associations scatter plots practice graph interpretation">
+            <input class="lesson-checkbox" type="checkbox" data-id="lesson-7" />
+            <div><p class="lesson-title">Positive and negative linear associations from scatter plots</p><div class="lesson-meta"><span class="tag practice">Practice</span></div><p class="lesson-desc">Practice interpreting graph relationships.</p></div>
+            <a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data/introduction-to-scatterplots/e/positive-and-negative-linear-correlations-from-scatter-plots">Open</a>
+          </article>
+        </div>
+        <div class="note-card"><strong>Study guide review:</strong> Khan does not perfectly cover every detail of scientific models, law vs. theory vs. hypothesis, or questions science cannot answer. Review those parts directly from your study guide after lesson 7.</div>
+      </section>
+
+      <section class="section" id="physics-motion" data-section>
+        <div class="section-header">
+          <div><h2>Physics: Motion, Forces, Newton’s Laws, Friction, and Gravity</h2><p class="section-subtitle">Build from motion vocabulary to forces, then Newton’s laws, friction, and gravity.</p></div>
+          <button class="button small ghost section-toggle" type="button">Mark section done</button>
+        </div>
+        <div class="lesson-grid">
+          <article class="lesson-card" data-type="video" data-search="introduction to physics forces motion energy waves"><input class="lesson-checkbox" type="checkbox" data-id="lesson-8" /><div><p class="lesson-title">Introduction to middle school physics</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Big ideas: forces, motion, energy, and waves.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/ms-physics/x1baed5db7c1bb50b%3Amotion-and-forces/x1baed5db7c1bb50b%3Amotion/v/intro-to-middle-school-physics">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="speed velocity direction motion"><input class="lesson-checkbox" type="checkbox" data-id="lesson-9" /><div><p class="lesson-title">Speed and velocity</p><div class="lesson-meta"><span class="tag video">Video / Lesson</span></div><p class="lesson-desc">Speed is how fast; velocity is speed with direction.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/ms-physics">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="acceleration change in velocity speeding up slowing down changing direction"><input class="lesson-checkbox" type="checkbox" data-id="lesson-10" /><div><p class="lesson-title">Acceleration</p><div class="lesson-meta"><span class="tag video">Video / Lesson</span></div><p class="lesson-desc">Acceleration is any change in velocity: speeding up, slowing down, or changing direction.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/ms-physics">Open</a></article>
+          <article class="lesson-card" data-type="practice" data-search="describing motion speed velocity acceleration practice"><input class="lesson-checkbox" type="checkbox" data-id="lesson-11" /><div><p class="lesson-title">Learn and try: Describing motion</p><div class="lesson-meta"><span class="tag practice">Practice</span></div><p class="lesson-desc">Practice motion terms before moving on to forces.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/ms-physics">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="forces push pull net force"><input class="lesson-checkbox" type="checkbox" data-id="lesson-12" /><div><p class="lesson-title">Forces</p><div class="lesson-meta"><span class="tag video">Video / Lesson</span></div><p class="lesson-desc">Force as a push or pull; force has magnitude and direction.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/physics/motion-and-kinematics/newtons-laws-of-motion">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="newton first law inertia net force no acceleration"><input class="lesson-checkbox" type="checkbox" data-id="lesson-13" /><div><p class="lesson-title">Newton’s first law</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Inertia: no net force means no acceleration.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/hs-physics-tx/x52b5e54e482d5bbe%3Aforces-and-motion/x52b5e54e482d5bbe%3Anewtons-first-and-second-laws/v/newtons_first_law">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="newton second law force mass acceleration"><input class="lesson-checkbox" type="checkbox" data-id="lesson-14" /><div><p class="lesson-title">Newton’s second law</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">More force means more acceleration; more mass means less acceleration.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/physics/force-and-motion-newton-s-laws/force-and-motion-khan/newton-s-laws-of-motion/v/newton-s-second-law-of-motion">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="newton third law equal opposite forces different objects"><input class="lesson-checkbox" type="checkbox" data-id="lesson-15" /><div><p class="lesson-title">Newton’s third law</p><div class="lesson-meta"><span class="tag video">Video / Lesson</span></div><p class="lesson-desc">Equal and opposite forces act on different objects.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/ms-physics">Open</a></article>
+          <article class="lesson-card" data-type="article" data-search="balanced and unbalanced forces net force"><input class="lesson-checkbox" type="checkbox" data-id="lesson-16" /><div><p class="lesson-title">Balanced and unbalanced forces</p><div class="lesson-meta"><span class="tag article">Lesson</span></div><p class="lesson-desc">Balanced forces create zero net force; unbalanced forces create acceleration.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/physics/motion-and-kinematics/newtons-laws-of-motion">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="static kinetic friction comparisons"><input class="lesson-checkbox" type="checkbox" data-id="lesson-17" /><div><p class="lesson-title">Intuition on static and kinetic friction comparisons</p><div class="lesson-meta"><span class="tag video">Video / Lesson</span></div><p class="lesson-desc">Learn why static friction is usually harder to overcome than kinetic friction.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/physics/forces-newtons-laws/inclined-planes-friction">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="static kinetic friction example"><input class="lesson-checkbox" type="checkbox" data-id="lesson-18" /><div><p class="lesson-title">Static and kinetic friction example</p><div class="lesson-meta"><span class="tag video">Video / Lesson</span></div><p class="lesson-desc">Apply friction ideas to example problems.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/physics/forces-newtons-laws/inclined-planes-friction">Open</a></article>
+          <article class="lesson-card" data-type="article" data-search="gravity newtonian mass distance universal gravitation"><input class="lesson-checkbox" type="checkbox" data-id="lesson-19" /><div><p class="lesson-title">Gravity / Newtonian gravity</p><div class="lesson-meta"><span class="tag article">Article</span></div><p class="lesson-desc">Gravity depends on mass and distance.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/physics/forces-newtons-laws/gravity/a/gravity-newtonian">Open</a></article>
+        </div>
+      </section>
+
+      <section class="section" id="physics-energy" data-section>
+        <div class="section-header"><div><h2>Physics: Work, Energy, and Conservation</h2><p class="section-subtitle">Learn what work means in physics, then connect it to energy transformations.</p></div><button class="button small ghost section-toggle" type="button">Mark section done</button></div>
+        <div class="lesson-grid">
+          <article class="lesson-card" data-type="video" data-search="introduction to work and energy force displacement"><input class="lesson-checkbox" type="checkbox" data-id="lesson-20" /><div><p class="lesson-title">Introduction to work and energy</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Work means force causing displacement; energy is the ability to do work.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/physics/introduction-to-work-and-energy">Open</a></article>
+          <article class="lesson-card" data-type="article" data-search="work as transfer of energy"><input class="lesson-checkbox" type="checkbox" data-id="lesson-21" /><div><p class="lesson-title">Work as the transfer of energy</p><div class="lesson-meta"><span class="tag article">Lesson</span></div><p class="lesson-desc">Connects work and energy transfer.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/physics/work-and-energy">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="kinetic energy energy of motion"><input class="lesson-checkbox" type="checkbox" data-id="lesson-22" /><div><p class="lesson-title">Kinetic energy</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Energy of motion; depends on mass and speed.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/hs-physics-tx/x52b5e54e482d5bbe%3Aenergy/x52b5e54e482d5bbe%3Akinetic-and-potential-energy/v/kinetic_energy?t=241">Open</a></article>
+          <article class="lesson-card" data-type="article" data-search="potential energy stored gravitational elastic chemical"><input class="lesson-checkbox" type="checkbox" data-id="lesson-23" /><div><p class="lesson-title">Potential energy</p><div class="lesson-meta"><span class="tag article">Article</span></div><p class="lesson-desc">Stored energy, especially gravitational potential energy.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/physics/energy/potential-energy/a/potential-energy">Open</a></article>
+          <article class="lesson-card" data-type="article" data-search="types of energy kinetic potential thermal electromagnetic chemical electrical"><input class="lesson-checkbox" type="checkbox" data-id="lesson-24" /><div><p class="lesson-title">Types of energy</p><div class="lesson-meta"><span class="tag article">Article</span></div><p class="lesson-desc">Review kinetic, potential, thermal, electromagnetic, chemical, and electrical energy.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/ap-physics-1/ap-linear-momentum/energy/a/types-of-energy">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="conservation of energy transformations transfer"><input class="lesson-checkbox" type="checkbox" data-id="lesson-25" /><div><p class="lesson-title">Conservation of energy</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Energy cannot be created or destroyed; it transfers and transforms.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/highschool-physics/x6679aa2c65c01e53%3Aenergy/x6679aa2c65c01e53%3Aconservation-of-energy/v/conservation_of_energy">Open</a></article>
+        </div>
+      </section>
+
+      <section class="section" id="physics-waves" data-section>
+        <div class="section-header"><div><h2>Physics: Waves and the Electromagnetic Spectrum</h2><p class="section-subtitle">Study wave behavior first, then mechanical vs. electromagnetic waves, then the EM spectrum.</p></div><button class="button small ghost section-toggle" type="button">Mark section done</button></div>
+        <div class="lesson-grid">
+          <article class="lesson-card" data-type="video" data-search="introduction to waves energy transfer matter"><input class="lesson-checkbox" type="checkbox" data-id="lesson-26" /><div><p class="lesson-title">Introduction to waves</p><div class="lesson-meta"><span class="tag video">Lesson</span></div><p class="lesson-desc">Waves transfer energy, not matter.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/physics/waves">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="wave properties amplitude wavelength frequency period"><input class="lesson-checkbox" type="checkbox" data-id="lesson-27" /><div><p class="lesson-title">Wave properties</p><div class="lesson-meta"><span class="tag video">Video / Article</span></div><p class="lesson-desc">Amplitude, wavelength, frequency, and period.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/ms-physics/x1baed5db7c1bb50b%3Awaves/x1baed5db7c1bb50b%3Awave-properties/v/wave-properties-wave-properties-high-school-physics-khan-academy">Open</a></article>
+          <article class="lesson-card" data-type="article" data-search="mechanical waves and light electromagnetic waves vacuum medium"><input class="lesson-checkbox" type="checkbox" data-id="lesson-28" /><div><p class="lesson-title">Mechanical waves and light</p><div class="lesson-meta"><span class="tag article">Article</span></div><p class="lesson-desc">Mechanical waves need a medium; electromagnetic waves can travel through a vacuum.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/ms-physics/x1baed5db7c1bb50b%3Awaves/x1baed5db7c1bb50b%3Amechanical-waves-and-light/a/mechanical-waves-and-light">Open</a></article>
+          <article class="lesson-card" data-type="practice" data-search="transverse longitudinal waves identify"><input class="lesson-checkbox" type="checkbox" data-id="lesson-29" /><div><p class="lesson-title">Identifying transverse and longitudinal waves</p><div class="lesson-meta"><span class="tag practice">Practice / Lesson</span></div><p class="lesson-desc">Transverse means across; longitudinal means along.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/hs-physics-tx">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="sound waves mechanical longitudinal"><input class="lesson-checkbox" type="checkbox" data-id="lesson-30" /><div><p class="lesson-title">Sound waves</p><div class="lesson-meta"><span class="tag video">Lesson</span></div><p class="lesson-desc">Sound is a mechanical longitudinal wave.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/ms-physics">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="electromagnetic spectrum radio microwave infrared visible ultraviolet x-rays gamma"><input class="lesson-checkbox" type="checkbox" data-id="lesson-31" /><div><p class="lesson-title">The electromagnetic spectrum</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Radio → microwave → infrared → visible → UV → X-ray → gamma.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/ms-physics/x1baed5db7c1bb50b%3Awaves/x1baed5db7c1bb50b%3Aelectromagnetic-waves/v/the-electromagnetic-spectrum">Open</a></article>
+          <article class="lesson-card" data-type="article" data-search="electromagnetic waves wavelength frequency energy vacuum"><input class="lesson-checkbox" type="checkbox" data-id="lesson-32" /><div><p class="lesson-title">Learn and try: Electromagnetic waves</p><div class="lesson-meta"><span class="tag article">Article / Lesson</span></div><p class="lesson-desc">Review vacuum travel, wavelength, frequency, and energy pattern.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/physics/waves/wave-properties/electromagnetic-waves">Open</a></article>
+        </div>
+      </section>
+
+      <section class="section" id="chem-atoms" data-section>
+        <div class="section-header"><div><h2>Chemistry: Matter, Atoms, Elements, and the Periodic Table</h2><p class="section-subtitle">Start with atomic structure, then learn how the periodic table is organized.</p></div><button class="button small ghost section-toggle" type="button">Mark section done</button></div>
+        <div class="lesson-grid">
+          <article class="lesson-card" data-type="video" data-search="protons neutrons electrons atoms nucleus charges mass"><input class="lesson-checkbox" type="checkbox" data-id="lesson-33" /><div><p class="lesson-title">Protons, neutrons, and electrons in atoms</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Atom parts, charges, locations, and relative mass.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/hs-chemistry/x2613d8165d88df5e%3Aatoms-isotopes-and-ions/x2613d8165d88df5e%3Aatomic-structure/v/protons-neutrons-and-electrons-in-atoms">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="elements atomic number protons identity"><input class="lesson-checkbox" type="checkbox" data-id="lesson-34" /><div><p class="lesson-title">Elements and atomic number</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Atomic number equals number of protons; protons define element identity.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/hs-chemistry/x2613d8165d88df5e%3Aatoms-isotopes-and-ions/x2613d8165d88df5e%3Aatomic-structure/v/elements-and-atomic-number?t=254">Open</a></article>
+          <article class="lesson-card" data-type="article" data-search="ions cations anions gaining losing electrons"><input class="lesson-checkbox" type="checkbox" data-id="lesson-35" /><div><p class="lesson-title">Ions</p><div class="lesson-meta"><span class="tag article">Article</span></div><p class="lesson-desc">Atoms gain or lose electrons to become ions.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/hs-chemistry/x2613d8165d88df5e%3Aatoms-isotopes-and-ions/x2613d8165d88df5e%3Aions/a/ions">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="periodic table periods groups metals nonmetals metalloids"><input class="lesson-checkbox" type="checkbox" data-id="lesson-36" /><div><p class="lesson-title">The periodic table</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Periods, groups, metals, nonmetals, and metalloids.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/hs-chemistry/x2613d8165d88df5e%3Aatoms-elements-and-the-periodic-table/x2613d8165d88df5e%3Athe-periodic-table/v/periodic-table-introduction?t=139">Open</a></article>
+          <article class="lesson-card" data-type="article" data-search="valence electrons periodic table groups"><input class="lesson-checkbox" type="checkbox" data-id="lesson-37" /><div><p class="lesson-title">Determine valence electrons using the periodic table</p><div class="lesson-meta"><span class="tag article">Article</span></div><p class="lesson-desc">Use group patterns to find valence electrons.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/hs-chemistry/x2613d8165d88df5e%3Aatoms-elements-and-the-periodic-table/x2613d8165d88df5e%3Athe-periodic-table/a/determine-valence-electrons-using-the-periodic-table">Open</a></article>
+          <article class="lesson-card" data-type="practice" data-search="structure of periodic table practice metals nonmetals metalloids"><input class="lesson-checkbox" type="checkbox" data-id="lesson-38" /><div><p class="lesson-title">Understand: Structure of the periodic table</p><div class="lesson-meta"><span class="tag practice">Practice</span></div><p class="lesson-desc">Practice periodic table organization and element categories.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/hs-chemistry/x2613d8165d88df5e%3Aatomic-models-and-periodicity/x2613d8165d88df5e%3Athe-periodic-table/e/understand-structure-of-the-periodic-table">Open</a></article>
+        </div>
+      </section>
+
+      <section class="section" id="chem-bonding" data-section>
+        <div class="section-header"><div><h2>Chemistry: Ions and Chemical Bonding</h2><p class="section-subtitle">Learn how valence electrons produce ionic, covalent, and metallic bonding.</p></div><button class="button small ghost section-toggle" type="button">Mark section done</button></div>
+        <div class="lesson-grid">
+          <article class="lesson-card" data-type="practice" data-search="valence electrons ionic compounds"><input class="lesson-checkbox" type="checkbox" data-id="lesson-39" /><div><p class="lesson-title">Valence electrons and ionic compounds</p><div class="lesson-meta"><span class="tag practice">Practice / Lesson</span></div><p class="lesson-desc">Why valence electrons matter in bonding.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/hs-chemistry/x2613d8165d88df5e%3Achemical-bonding/x2613d8165d88df5e%3Aionic-bonds/e/apply-ionic-bonds-and-compounds">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="ionic bonds metal nonmetal electron transfer cation anion"><input class="lesson-checkbox" type="checkbox" data-id="lesson-40" /><div><p class="lesson-title">Ionic bonds</p><div class="lesson-meta"><span class="tag video">Lesson</span></div><p class="lesson-desc">Metal + nonmetal; electrons are transferred.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/hs-chemistry/x2613d8165d88df5e%3Achemical-bonding/x2613d8165d88df5e%3Aionic-bonds">Open</a></article>
+          <article class="lesson-card" data-type="article" data-search="covalent bonds nonmetal sharing electrons molecules"><input class="lesson-checkbox" type="checkbox" data-id="lesson-41" /><div><p class="lesson-title">Covalent bonds</p><div class="lesson-meta"><span class="tag article">Lesson</span></div><p class="lesson-desc">Nonmetal + nonmetal; electrons are shared.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/high-school-biology/hs-chemistry">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="metallic bonds sea of electrons conductivity malleable ductile"><input class="lesson-checkbox" type="checkbox" data-id="lesson-42" /><div><p class="lesson-title">Metallic bonds</p><div class="lesson-meta"><span class="tag video">Video / Article</span></div><p class="lesson-desc">Metal atoms and freely moving “sea” of electrons.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/chemistry/chemical-bonds/metallic-bonding/a/metallic-bonds">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="predicting bond type metals nonmetals ionic covalent metallic"><input class="lesson-checkbox" type="checkbox" data-id="lesson-43" /><div><p class="lesson-title">Predicting bond type: metals vs. nonmetals</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Decision rules for ionic, covalent, and metallic bonds.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/hs-chemistry/x2613d8165d88df5e%3Achemical-bonding/x2613d8165d88df5e%3Ametallic-bonds/v/predicting-bond-type-metals-nonmetals?t=0">Open</a></article>
+          <article class="lesson-card" data-type="practice" data-search="apply predicting bond type practice"><input class="lesson-checkbox" type="checkbox" data-id="lesson-44" /><div><p class="lesson-title">Apply: Predicting bond type</p><div class="lesson-meta"><span class="tag practice">Practice</span></div><p class="lesson-desc">Practice classifying bonds by element type.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/hs-chemistry/x2613d8165d88df5e%3Achemical-bonding/x2613d8165d88df5e%3Ametallic-bonds/e/apply-predicting-bond-type">Open</a></article>
+        </div>
+      </section>
+
+      <section class="section" id="chem-matter" data-section>
+        <div class="section-header"><div><h2>Chemistry: States of Matter, Heat, Phase Changes, and Chemical Changes</h2><p class="section-subtitle">Connect particle behavior to solids, liquids, gases, heat transfer, and conservation of mass.</p></div><button class="button small ghost section-toggle" type="button">Mark section done</button></div>
+        <div class="lesson-grid">
+          <article class="lesson-card" data-type="video" data-search="states of matter solids liquids gases particle behavior"><input class="lesson-checkbox" type="checkbox" data-id="lesson-45" /><div><p class="lesson-title">States of matter</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Solids, liquids, gases, and particle behavior.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/chemistry/states-of-matter-and-intermolecular-forces/states-of-matter/v/states-of-matter">Open</a></article>
+          <article class="lesson-card" data-type="article" data-search="particulate models solids liquids gases microscopic macroscopic"><input class="lesson-checkbox" type="checkbox" data-id="lesson-46" /><div><p class="lesson-title">Representing solids, liquids, and gases using particulate models</p><div class="lesson-meta"><span class="tag article">Lesson</span></div><p class="lesson-desc">Microscopic particle behavior explains macroscopic properties.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/chemistry/states-of-matter">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="thermal energy temperature heat average kinetic energy transfer"><input class="lesson-checkbox" type="checkbox" data-id="lesson-47" /><div><p class="lesson-title">Thermal energy, temperature, and heat</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Temperature vs. thermal energy vs. heat.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/hs-chemistry/x2613d8165d88df5e%3Athermochemistry/x2613d8165d88df5e%3Athermal-energy-and-equilibrium/v/thermal-energy-temperature-and-heat">Open</a></article>
+          <article class="lesson-card" data-type="article" data-search="heat temperature transfer warmer cooler"><input class="lesson-checkbox" type="checkbox" data-id="lesson-48" /><div><p class="lesson-title">Heat and temperature</p><div class="lesson-meta"><span class="tag article">Article</span></div><p class="lesson-desc">Heat transfers from warmer objects to cooler objects.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/chemistry/thermodynamics-chemical-energetics/internal-energy-sal/a/heat">Open</a></article>
+          <article class="lesson-card" data-type="article" data-search="phase changes melting freezing evaporation condensation"><input class="lesson-checkbox" type="checkbox" data-id="lesson-49" /><div><p class="lesson-title">Phase changes</p><div class="lesson-meta"><span class="tag article">Video / Article</span></div><p class="lesson-desc">Melting, freezing, evaporation, boiling, and condensation.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/chemistry/states-of-matter-and-intermolecular-forces/phase-diagrams/a/phase-changes">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="physical chemical changes bonds break form new substances"><input class="lesson-checkbox" type="checkbox" data-id="lesson-50" /><div><p class="lesson-title">Physical and chemical changes</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Physical changes keep the same substance; chemical changes form new substances.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/chemistry/physical-and-chemical-changes">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="chemical equations reactants products conservation matter"><input class="lesson-checkbox" type="checkbox" data-id="lesson-51" /><div><p class="lesson-title">Chemical equations</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Reactants, products, and conservation of matter.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/chemistry/chemical-equations">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="law of conservation of mass mass before after"><input class="lesson-checkbox" type="checkbox" data-id="lesson-52" /><div><p class="lesson-title">Law of conservation of mass</p><div class="lesson-meta"><span class="tag video">Video / Article</span></div><p class="lesson-desc">Mass before a change equals mass after a change.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/ap-chemistry/chemical-reactions-ap/stoichiometry-ap/a/law-of-conservation-of-mass">Open</a></article>
+        </div>
+        <div class="note-card"><strong>Skip unless assigned:</strong> average atomic mass, detailed isotope calculations, naming polyatomic ions, and full stoichiometry. Your study guide is more conceptual.</div>
+      </section>
+
+      <section class="section" id="earth-space" data-section>
+        <div class="section-header"><div><h2>Earth Science: Solar System, Seasons, and Earth’s Layers</h2><p class="section-subtitle">Study objects in the solar system, Earth’s rotation/tilt, and Earth’s interior layers.</p></div><button class="button small ghost section-toggle" type="button">Mark section done</button></div>
+        <div class="lesson-grid">
+          <article class="lesson-card" data-type="video" data-search="solar system sun planets moons asteroids comets inner outer planets"><input class="lesson-checkbox" type="checkbox" data-id="lesson-53" /><div><p class="lesson-title">The solar system</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Sun, planets, moons, asteroids, comets, and inner/outer planets.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/middle-school-earth-and-space-science/x87d03b443efbea0a%3Aearth-in-space/x87d03b443efbea0a%3Athe-solar-system/v/the-solar-system-ms">Open</a></article>
+          <article class="lesson-card" data-type="article" data-search="key points solar system planets asteroid belt comets"><input class="lesson-checkbox" type="checkbox" data-id="lesson-54" /><div><p class="lesson-title">Key points: The solar system</p><div class="lesson-meta"><span class="tag article">Article</span></div><p class="lesson-desc">Quick review of planets, the asteroid belt, and comets.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/middle-school-earth-and-space-science/x87d03b443efbea0a%3Aearth-in-space/x87d03b443efbea0a%3Athe-solar-system/a/the-solar-system">Open</a></article>
+          <article class="lesson-card" data-type="practice" data-search="understand solar system practice planet order inner outer planets"><input class="lesson-checkbox" type="checkbox" data-id="lesson-55" /><div><p class="lesson-title">Understand: The solar system</p><div class="lesson-meta"><span class="tag practice">Practice</span></div><p class="lesson-desc">Practice planet order and inner/outer planet differences.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/middle-school-earth-and-space-science/x87d03b443efbea0a%3Aearth-in-space/x87d03b443efbea0a%3Athe-solar-system/e/understand-the-solar-system">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="seasons not closeness to sun tilt misconception"><input class="lesson-checkbox" type="checkbox" data-id="lesson-56" /><div><p class="lesson-title">Seasons aren’t dictated by closeness to sun</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Misconception check: distance from the Sun is not the main cause of seasons.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/cosmology-and-astronomy/earth-history-topic/earth-title-topic/v/seasons-aren-t-dictated-by-closeness-to-sun">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="earth tilt causes seasons opposite hemispheres"><input class="lesson-checkbox" type="checkbox" data-id="lesson-57" /><div><p class="lesson-title">How Earth’s tilt causes seasons</p><div class="lesson-meta"><span class="tag video">Lesson</span></div><p class="lesson-desc">Tilt, sunlight angle, and opposite seasons in the hemispheres.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/cosmology-and-astronomy/earth-history-topic/moon-phases-and-eclipses">Open</a></article>
+          <article class="lesson-card" data-type="article" data-search="structure of the earth crust mantle outer core inner core"><input class="lesson-checkbox" type="checkbox" data-id="lesson-58" /><div><p class="lesson-title">Structure of the Earth</p><div class="lesson-meta"><span class="tag article">Lesson</span></div><p class="lesson-desc">Crust, mantle, outer core, and inner core.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/cosmology-and-astronomy/earth-history-topic/earth-title-topic">Open</a></article>
+        </div>
+      </section>
+
+      <section class="section" id="earth-rocks" data-section>
+        <div class="section-header"><div><h2>Earth Science: Weathering, Erosion, Deposition, Landforms, and Rocks</h2><p class="section-subtitle">Learn the processes that break, move, deposit, and transform Earth materials.</p></div><button class="button small ghost section-toggle" type="button">Mark section done</button></div>
+        <div class="lesson-grid">
+          <article class="lesson-card" data-type="video" data-search="weathering erosion deposition physical chemical"><input class="lesson-checkbox" type="checkbox" data-id="lesson-59" /><div><p class="lesson-title">Weathering and erosion</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Weathering, erosion, and deposition basics.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/shs-earth-and-life-science/x901efce4a07b98a5%3Aunit-1/x901efce4a07b98a5%3Aexogenic-processes/v/weathering-and-erosion">Open</a></article>
+          <article class="lesson-card" data-type="article" data-search="key points weathering erosion physical chemical deposition"><input class="lesson-checkbox" type="checkbox" data-id="lesson-60" /><div><p class="lesson-title">Key points: Weathering and erosion</p><div class="lesson-meta"><span class="tag article">Article</span></div><p class="lesson-desc">Review physical weathering, chemical weathering, erosion, and deposition.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/shs-earth-science/xecff05e2330f305a%3A2nd-quarter/xecff05e2330f305a%3Aexogenic-processes/a/weathering-and-erosion">Open</a></article>
+          <article class="lesson-card" data-type="practice" data-search="understand weathering erosion landform process practice"><input class="lesson-checkbox" type="checkbox" data-id="lesson-61" /><div><p class="lesson-title">Understand: Weathering and erosion</p><div class="lesson-meta"><span class="tag practice">Practice</span></div><p class="lesson-desc">Check landform and process understanding.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/middle-school-earth-and-space-science/x87d03b443efbea0a%3Athe-geosphere/x87d03b443efbea0a%3Aweathering-and-erosion/a/weathering-and-erosion">Open</a></article>
+          <article class="lesson-card" data-type="article" data-search="rock cycle igneous sedimentary metamorphic melting cooling pressure weathering"><input class="lesson-checkbox" type="checkbox" data-id="lesson-62" /><div><p class="lesson-title">The rock cycle</p><div class="lesson-meta"><span class="tag article">Article</span></div><p class="lesson-desc">Igneous, sedimentary, and metamorphic rocks plus melting, cooling, pressure, and weathering.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/shs-earth-and-life-science/x901efce4a07b98a5%3Aunit-1/x901efce4a07b98a5%3Aminerals-and-rocks/a/the-rock-cycle">Open</a></article>
+        </div>
+        <div class="note-card"><strong>Study guide review:</strong> After lesson 62, review sand dunes, river valleys, deltas, meanders, glaciers, moraines, and U-shaped vs. V-shaped valleys directly from your study guide.</div>
+      </section>
+
+      <section class="section" id="earth-weather" data-section>
+        <div class="section-header"><div><h2>Earth Science: Atmosphere, Air Masses, Fronts, and Pressure Systems</h2><p class="section-subtitle">Finish with atmospheric layers, air density/pressure, fronts, and weather systems.</p></div><button class="button small ghost section-toggle" type="button">Mark section done</button></div>
+        <div class="lesson-grid">
+          <article class="lesson-card" data-type="article" data-search="earth atmosphere composition layers troposphere stratosphere mesosphere thermosphere exosphere"><input class="lesson-checkbox" type="checkbox" data-id="lesson-63" /><div><p class="lesson-title">Earth’s atmosphere</p><div class="lesson-meta"><span class="tag article">Article</span></div><p class="lesson-desc">Atmosphere composition and layers from troposphere to exosphere.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/shs-earth-and-life-science/x901efce4a07b98a5%3Aunit-1/x901efce4a07b98a5%3Aearth-and-earth-systems/a/earth-s-atmosphere">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="global wind patterns rising sinking air pressure"><input class="lesson-checkbox" type="checkbox" data-id="lesson-64" /><div><p class="lesson-title">Global wind patterns</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Rising/sinking air and pressure patterns.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/ap-college-environmental-science/x0b0e430a38ebd23f%3Aearth-systems-and-resources/x0b0e430a38ebd23f%3Aearths-air-and-water/v/global-wind-patterns">Open</a></article>
+          <article class="lesson-card" data-type="video" data-search="weather air masses pressure systems fronts high low pressure"><input class="lesson-checkbox" type="checkbox" data-id="lesson-65" /><div><p class="lesson-title">Weather</p><div class="lesson-meta"><span class="tag video">Video</span></div><p class="lesson-desc">Air masses, pressure systems, fronts, and high/low pressure weather.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/middle-school-earth-and-space-science/x87d03b443efbea0a%3Aweather-and-climate/x87d03b443efbea0a%3Aweather/v/weather?t=81">Open</a></article>
+          <article class="lesson-card" data-type="article" data-search="fronts and weather warm front cold front weather maps pressure symbols"><input class="lesson-checkbox" type="checkbox" data-id="lesson-66" /><div><p class="lesson-title">Fronts and weather</p><div class="lesson-meta"><span class="tag article">Article</span></div><p class="lesson-desc">Warm fronts, cold fronts, pressure symbols, and weather maps.</p></div><a class="open-link" target="_blank" rel="noopener" href="https://www.khanacademy.org/science/grade-8-science-tx/x3cd7525f789ab4f1%3Aweather-systems/x3cd7525f789ab4f1%3Awind-air-masses-and-fronts/a/fronts-and-weather">Open</a></article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="footer">
+    <p>Tip: After each section, pause and quiz yourself from the study guide before moving forward. Progress is saved in this browser using local storage.</p>
+  </footer>
+
+  <script>
+    const checkboxes = Array.from(document.querySelectorAll('.lesson-checkbox'));
+    const cards = Array.from(document.querySelectorAll('.lesson-card'));
+    const totalCount = document.getElementById('totalCount');
+    const completedCount = document.getElementById('completedCount');
+    const progressPercent = document.getElementById('progressPercent');
+    const progressFill = document.getElementById('progressFill');
+    const searchInput = document.getElementById('searchInput');
+    let activeFilter = 'all';
+
+    function saveProgress() {
+      const progress = {};
+      checkboxes.forEach(cb => progress[cb.dataset.id] = cb.checked);
+      localStorage.setItem('ipsKhanStudyProgress', JSON.stringify(progress));
+    }
+
+    function loadProgress() {
+      const stored = JSON.parse(localStorage.getItem('ipsKhanStudyProgress') || '{}');
+      checkboxes.forEach(cb => {
+        cb.checked = Boolean(stored[cb.dataset.id]);
+        cb.closest('.lesson-card').classList.toggle('completed', cb.checked);
+      });
+    }
+
+    function updateProgress() {
+      const total = checkboxes.length;
+      const completed = checkboxes.filter(cb => cb.checked).length;
+      const pct = total ? Math.round((completed / total) * 100) : 0;
+      totalCount.textContent = total;
+      completedCount.textContent = completed;
+      progressPercent.textContent = pct;
+      progressFill.style.width = pct + '%';
+      document.title = `${pct}% Complete · Integrated Physical Sciences Study Plan`;
+    }
+
+    function applyFilters() {
+      const q = searchInput.value.trim().toLowerCase();
+      cards.forEach(card => {
+        const matchesText = !q || card.innerText.toLowerCase().includes(q) || (card.dataset.search || '').includes(q);
+        const matchesType = activeFilter === 'all' || card.dataset.type === activeFilter;
+        card.classList.toggle('hidden', !(matchesText && matchesType));
+      });
+    }
+
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', () => {
+        cb.closest('.lesson-card').classList.toggle('completed', cb.checked);
+        saveProgress();
+        updateProgress();
+      });
+    });
+
+    document.querySelectorAll('[data-filter]').forEach(button => {
+      button.addEventListener('click', () => {
+        activeFilter = button.dataset.filter;
+        applyFilters();
+      });
+    });
+
+    searchInput.addEventListener('input', applyFilters);
+
+    document.querySelectorAll('.section-toggle').forEach(button => {
+      button.addEventListener('click', () => {
+        const section = button.closest('[data-section]');
+        const boxes = Array.from(section.querySelectorAll('.lesson-checkbox'));
+        const allDone = boxes.every(cb => cb.checked);
+        boxes.forEach(cb => {
+          cb.checked = !allDone;
+          cb.closest('.lesson-card').classList.toggle('completed', cb.checked);
+        });
+        saveProgress();
+        updateProgress();
+      });
+    });
+
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      if (!confirm('Reset all study progress?')) return;
+      localStorage.removeItem('ipsKhanStudyProgress');
+      checkboxes.forEach(cb => {
+        cb.checked = false;
+        cb.closest('.lesson-card').classList.remove('completed');
+      });
+      updateProgress();
+    });
+
+    loadProgress();
+    updateProgress();
+  </script>
+</body>
+</html>
